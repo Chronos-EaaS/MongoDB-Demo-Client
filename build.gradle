@@ -1,0 +1,117 @@
+/*
+ * Copyright (c) 2016-2017 Databases and Information Systems Research Group, University of Basel, Switzerland
+ */
+
+
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        // Shadowing; used to make a fat jar
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+    }
+}
+
+
+repositories {
+    // Local maven repository
+    mavenLocal()
+
+    // DBIS Artifactory
+    maven {
+        url 'http://dbis-artifactory.dmi.unibas.ch/dbis-internal/'
+    }
+
+    // local lib folder
+    flatDir {
+        dirs 'libs'
+    }
+
+    // Maven Central
+    mavenCentral()
+
+    //
+    jcenter()
+}
+
+
+apply plugin: 'application'
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+
+group 'ch.unibas.dmi.dbis.chronos'
+// Semantic Versioning: http://semver.org/
+version '1.0.0-SNAPSHOT'
+
+
+description = "Chronos Demo Agent"
+
+
+mainClassName = "ch.unibas.dmi.dbis.chronos.demoagent.App"
+
+
+compileJava.options.encoding = 'UTF-8'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+configurations.all {
+    // check for updates every build
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+
+        inheritOutputDirs = false
+        outputDir = file("${project.buildDir}/classes/main")
+        testOutputDir = file("${project.buildDir}/classes/test")
+    }
+}
+
+
+dependencies {
+    // https://projectlombok.org/
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
+
+    compile group: 'ch.unibas.dmi.dbis.chronos', name: 'chronos-agent', version: '2.1.0-SNAPSHOT'
+    compile group: 'com.github.rvesse', name: 'airline', version: '2.2.0'
+}
+
+
+jar {
+    manifest {
+        attributes "Manifest-Version": "1.0"
+        attributes "Copyright": "Databases and Information Systems Group, Department Mathematics and Computer Science, University of Basel, Switzerland"
+        attributes "Version": "$version"
+        attributes "Main-Class": mainClassName
+    }
+}
+
+
+shadowJar {
+    classifier = null
+}
+
+
+assemble.dependsOn shadowJar
+
+
+artifacts {
+//    archives jar
+    archives shadowJar
+}
+
+/////////////
+// JAVADOC //
+javadoc {
+    failOnError = false
+}
