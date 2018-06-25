@@ -82,7 +82,7 @@ dependencies {
     // https://projectlombok.org/
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
 
-    compile group: 'ch.unibas.dmi.dbis.chronos', name: 'chronos-agent', version: '2.1.0-SNAPSHOT'
+    compile group: 'ch.unibas.dmi.dbis.chronos', name: 'chronos-agent', version: '2.2.0-SNAPSHOT'
     compile group: 'com.github.rvesse', name: 'airline', version: '2.2.0'
 }
 
