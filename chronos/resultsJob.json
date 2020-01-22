@@ -1,0 +1,1 @@
+[{"id":"936234dc-2925-77ee-dbe6-5296e5e038fe","name":"Average Latency per Operation Type","type":"bar-plot","parameter":"read.latency,update.latency"},{"id":"4a36035d-1471-cea7-1df3-328c382d13be","name":"Read / Update Ratio","type":"pie-plot","parameter":"read.operations,update.operations"}]
