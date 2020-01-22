@@ -44,7 +44,7 @@ public class MongoDbWrapper {
     public static void start() throws ExecutionException {
         LOG.log( Level.INFO, "Start MongoDB..." );
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder( "/usr/bin/sudo", "service", "mongod", "start" );
+            ProcessBuilder processBuilder = new ProcessBuilder( "/usr/bin/sudo", "service", "mongodb", "start" );
             processBuilder.redirectErrorStream( true );
             processBuilder.directory( App.WORKING_DIR );
             Process pwd = processBuilder.start();
@@ -70,7 +70,7 @@ public class MongoDbWrapper {
     public static void stop() throws ExecutionException {
         LOG.log( Level.INFO, "Stop MongoDB..." );
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder( "/usr/bin/sudo", "service", "mongod", "stop" );
+            ProcessBuilder processBuilder = new ProcessBuilder( "/usr/bin/sudo", "service", "mongodb", "stop" );
             processBuilder.redirectErrorStream( true );
             processBuilder.directory( App.WORKING_DIR );
             Process pwd = processBuilder.start();
@@ -121,7 +121,7 @@ public class MongoDbWrapper {
 
     public static void setConfiguration( final Configuration configuration, File configFile ) throws ExecutionException {
         try (
-                PrintWriter etc = new PrintWriter( "/etc/mongod.conf" );
+                PrintWriter etc = new PrintWriter( "/etc/mongodb.conf" );
                 PrintWriter archive = new PrintWriter( configFile )
         ) {
             etc.println( configuration.toString() );
