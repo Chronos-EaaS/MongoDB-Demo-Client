@@ -39,15 +39,18 @@ public class ChronosAgent extends AbstractChronosAgent {
 
     private static final Logger LOG = Logger.getLogger( ChronosAgent.class.getName() );
 
+    private final String systemId;
 
-    ChronosAgent( InetAddress address, int port, boolean secure, boolean useHostname, String environment ) {
+
+    ChronosAgent( InetAddress address, int port, boolean secure, boolean useHostname, String environment, String systemId ) {
         super( address, port, secure, useHostname, environment );
+        this.systemId = systemId;
     }
 
 
     @Override
     protected String[] getSupportedSystemNames() {
-        return new String[]{ "demoall" };
+        return new String[]{ systemId };
     }
 
 

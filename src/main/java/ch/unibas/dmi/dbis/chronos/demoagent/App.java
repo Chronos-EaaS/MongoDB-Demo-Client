@@ -47,8 +47,12 @@ public class App implements Runnable {
     @Option(name = { "-p", "--port" }, description = "Port of the REST API of the Chronos server.")
     private int port = 443;
 
-    @Option(name = { "-e", "--environment" }, description = "Identifier of the evaluation environment this client runs in.")
+    @Option(name = { "-e", "--environment" }, description = "The evaluation environment this client runs in.")
     private String environment = "";
+
+    @Required
+    @Option(name = { "-s", "--system" }, description = "System identifier of chronos")
+    private String systemId = "";
 
 
     public static void main( String[] args ) {
@@ -72,7 +76,7 @@ public class App implements Runnable {
             WORKING_DIR.mkdir();
         }
 
-        AbstractChronosAgent aca = new ChronosAgent( address, port, true, true, environment );
+        AbstractChronosAgent aca = new ChronosAgent( address, port, true, true, environment, systemId );
         aca.setDaemon( false );
         aca.start();
     }
