@@ -32,6 +32,7 @@ import java.io.File;
 import java.net.InetAddress;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 
@@ -78,18 +79,32 @@ public class ChronosAgent extends AbstractChronosAgent {
         MongoDbWrapper.stop();
         updateProgress( job, 4 );
 
+        // Wait a second to allow mongodb to complete its shutdown sequence
+        try {
+            TimeUnit.SECONDS.sleep( 1 );
+        } catch ( InterruptedException e ) {
+            // ignore
+        }
+
         // Drop old MongoDB data
         MongoDbWrapper.drop();
         updateProgress( job, 5 );
 
         // Write MongoDB configuration
-        File configFile = new File( outputDirectory, "mongod.conf" );
+        File configFile = new File( outputDirectory, "mongodb.conf" );
         MongoDbWrapper.setConfiguration( configuration, configFile );
         updateProgress( job, 6 );
 
         // Start MongoDB process
         MongoDbWrapper.start();
         updateProgress( job, 8 );
+
+        // Wait a second to allow mongodb to complete its startup sequence
+        try {
+            TimeUnit.SECONDS.sleep( 1 );
+        } catch ( InterruptedException e ) {
+            // ignore
+        }
 
         // Download and prepare YCSB
         YcsbWrapper.install();

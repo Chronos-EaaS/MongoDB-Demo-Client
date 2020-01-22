@@ -70,7 +70,7 @@ public class MongoDbWrapper {
     public static void stop() throws ExecutionException {
         LOG.log( Level.INFO, "Stop MongoDB..." );
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder( "/usr/bin/sudo", "service", "mongodb", "stop" );
+            ProcessBuilder processBuilder = new ProcessBuilder( "/usr/bin/sudo", "service", "mongodb", "force-stop" );
             processBuilder.redirectErrorStream( true );
             processBuilder.directory( App.WORKING_DIR );
             Process pwd = processBuilder.start();

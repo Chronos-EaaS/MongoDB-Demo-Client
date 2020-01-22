@@ -38,8 +38,8 @@ public class Configuration {
 
     // systemLog
     private String logDestination = "file";
-    private boolean logAppend = true;
-    private String logPath = "/var/log/mongodb/mongod.log";
+    private boolean logAppend = false;
+    private String logPath = "/var/log/mongodb/mongodb.log";
 
     // network
     private int port = 27017;
