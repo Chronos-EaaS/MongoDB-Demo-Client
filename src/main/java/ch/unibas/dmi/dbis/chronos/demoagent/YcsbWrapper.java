@@ -43,7 +43,7 @@ import org.apache.commons.io.FileUtils;
 
 public class YcsbWrapper {
 
-    public static final String YCSB_VERSION = "0.13.0";
+    public static final String YCSB_VERSION = "0.17.0";
 
     private static final Logger LOG = Logger.getLogger( MongoDbWrapper.class.getName() );
 
