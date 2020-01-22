@@ -1,38 +1,43 @@
-/*
- * Copyright (c) 2016-2017 Databases and Information Systems Research Group, University of Basel, Switzerland
- */
+
+group 'ch.unibas.dmi.dbis.chronos'
+description = "Chronos Demo Agent"
+
+
+// Semantic Versioning: http://semver.org/
+def versionMajor = 1
+def versionMinor = 0
+def versionQualifier = "-SNAPSHOT"
+version = versionMajor + "." + versionMinor + versionQualifier
 
 
 buildscript {
     repositories {
         mavenCentral()
         jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
-        // Shadowing; used to make a fat jar
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+        // Shadowing; used to make a fat jar (https://github.com/johnrengelman/shadow)
+        classpath group: "com.github.jengelman.gradle.plugins", name: "shadow", version: "5.0.0"
+        // Lombok (https://plugins.gradle.org/plugin/io.freefair.lombok)
+        classpath group: "io.freefair.gradle", name: "lombok-plugin", version: "4.1.6"
     }
 }
 
 
 repositories {
-    // Local maven repository
     mavenLocal()
-
-    // DBIS Artifactory
+    mavenCentral()
     maven {
-        url 'http://dbis-artifactory.dmi.unibas.ch/dbis-internal/'
+        // DBIS Nexus
+        url "https://dbis-nexus.dmi.unibas.ch/repository/maven2/"
     }
-
-    // local lib folder
     flatDir {
+        // local lib folder
         dirs 'libs'
     }
-
-    // Maven Central
-    mavenCentral()
-
-    //
     jcenter()
 }
 
@@ -41,16 +46,13 @@ apply plugin: 'application'
 apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'maven'
-apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: "io.freefair.lombok"
 
 
-group 'ch.unibas.dmi.dbis.chronos'
-// Semantic Versioning: http://semver.org/
-version '1.0.0-SNAPSHOT'
-
-
-description = "Chronos Demo Agent"
-
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
 
 mainClassName = "ch.unibas.dmi.dbis.chronos.demoagent.App"
 
@@ -66,24 +68,9 @@ configurations.all {
 }
 
 
-idea {
-    module {
-        downloadJavadoc = true
-        downloadSources = true
-
-        inheritOutputDirs = false
-        outputDir = file("${project.buildDir}/classes/main")
-        testOutputDir = file("${project.buildDir}/classes/test")
-    }
-}
-
-
 dependencies {
-    // https://projectlombok.org/
-    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
-
-    compile group: 'ch.unibas.dmi.dbis.chronos', name: 'chronos-agent', version: '2.2.0-SNAPSHOT'
-    compile group: 'com.github.rvesse', name: 'airline', version: '2.2.0'
+    compile group: 'ch.unibas.dmi.dbis.chronos', name: 'chronos-agent', version: '2.2.1'
+    compile group: 'com.github.rvesse', name: 'airline', version: '2.7.2'
 }
 
 
@@ -96,22 +83,30 @@ jar {
     }
 }
 
-
 shadowJar {
     classifier = null
 }
 
-
 assemble.dependsOn shadowJar
-
 
 artifacts {
 //    archives jar
     archives shadowJar
 }
 
-/////////////
-// JAVADOC //
+
 javadoc {
     failOnError = false
+}
+
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+
+        inheritOutputDirs = false
+        outputDir = file("${project.buildDir}/classes/main")
+        testOutputDir = file("${project.buildDir}/classes/test")
+    }
 }
