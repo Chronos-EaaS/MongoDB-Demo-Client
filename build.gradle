@@ -5,8 +5,8 @@ description = "Chronos Demo Agent"
 
 // Semantic Versioning: http://semver.org/
 def versionMajor = 1
-def versionMinor = 0
-def versionQualifier = ""
+def versionMinor = 1
+def versionQualifier = "-SNAPSHOT"
 version = versionMajor + "." + versionMinor + versionQualifier
 
 
