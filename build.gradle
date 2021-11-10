@@ -1,9 +1,8 @@
 
-group 'ch.unibas.dmi.dbis.chronos'
+group "ch.unibas.dmi.dbis.chronos"
 description = "Chronos Demo Agent"
 
 
-// Semantic Versioning: http://semver.org/
 def versionMajor = 1
 def versionMinor = 1
 def versionQualifier = "-SNAPSHOT"
@@ -13,72 +12,62 @@ version = versionMajor + "." + versionMinor + versionQualifier
 buildscript {
     repositories {
         mavenCentral()
-        jcenter()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
     }
     dependencies {
         // Shadowing; used to make a fat jar (https://github.com/johnrengelman/shadow)
-        classpath group: "com.github.jengelman.gradle.plugins", name: "shadow", version: "5.0.0"
+        classpath group: "com.github.jengelman.gradle.plugins", name: "shadow", version: "6.1.0"
         // Lombok (https://plugins.gradle.org/plugin/io.freefair.lombok)
-        classpath group: "io.freefair.gradle", name: "lombok-plugin", version: "4.1.6"
+        classpath group: "io.freefair.gradle", name: "lombok-plugin", version: "6.2.0"
     }
 }
 
 
 repositories {
-    mavenLocal()
     mavenCentral()
-    maven {
-        // DBIS Nexus
-        url "https://dbis-nexus.dmi.unibas.ch/repository/maven2/"
-    }
-    flatDir {
-        // local lib folder
-        dirs 'libs'
-    }
-    jcenter()
 }
 
 
-apply plugin: 'application'
-apply plugin: 'idea'
-apply plugin: 'java'
-apply plugin: 'maven'
+apply plugin: "application"
+apply plugin: "idea"
+apply plugin: "java-library"
 apply plugin: "com.github.johnrengelman.shadow"
 apply plugin: "io.freefair.lombok"
 
 
+compileJava.options.encoding = "UTF-8"
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
+
 mainClassName = "ch.unibas.dmi.dbis.chronos.demoagent.App"
 
 
-compileJava.options.encoding = 'UTF-8'
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-
-configurations.all {
-    // check for updates every build
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    withJavadocJar()
+    withSourcesJar()
 }
 
 
 dependencies {
-    compile group: 'ch.unibas.dmi.dbis.chronos', name: 'chronos-agent', version: '2.2.1'
-    compile group: 'com.github.rvesse', name: 'airline', version: '2.7.2'
+    implementation group: 'org.chronos-eaas', name: 'chronos-agent', version: '2.3.3'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.5'
+    implementation group: 'com.github.rvesse', name: 'airline', version: '2.7.2'
 }
 
 
 jar {
     manifest {
         attributes "Manifest-Version": "1.0"
-        attributes "Copyright": "Databases and Information Systems Group, Department Mathematics and Computer Science, University of Basel, Switzerland"
-        attributes "Version": "$version"
+        attributes "Copyright": "The Chronos Project (chronos-eaas.org)"
+        attributes "Group": project.group
+        attributes "Name": project.name
+        attributes "Version": project.version
         attributes "Main-Class": mainClassName
     }
 }
